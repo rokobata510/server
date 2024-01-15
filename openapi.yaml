@@ -1,0 +1,219 @@
+openapi: 3.0.0
+info:
+  title: Your API Title
+  version: 1.0.0
+  description: Your API Description
+servers:
+  - url: http://localhost:8080
+paths:
+  /api-docs:
+    get:
+      summary: Get Swagger UI
+      description: Get the Swagger UI to visualize and interact with the API resources
+      responses:
+        '200':
+          description: Successful response
+          content:
+            text/html:
+              example: "<!DOCTYPE html>..."
+  /users:
+    post:
+      summary: Create a new user
+      requestBody:
+        description: User data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                is_admin:
+                  type: boolean
+              required:
+                - username
+                - password
+      responses:
+        '200':
+          description: User created
+    get:
+      summary: Get all users
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example: []
+  /users/{id}:
+    get:
+      summary: Get a user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example: {}
+    delete:
+      summary: Delete a user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User deleted
+  /users/{id}/admin:
+    put:
+      summary: Grant admin rights to a user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Admin rights granted
+  /login:
+    post:
+      summary: User login
+      requestBody:
+        description: User credentials
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username
+                - password
+      responses:
+        '200':
+          description: Successful login
+  /dashboard:
+    get:
+      summary: Get user dashboard
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            text/plain:
+              example: "Welcome to your dashboard!"
+  /posts:
+    post:
+      summary: Create a new post
+      requestBody:
+        description: Post data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+                userId:
+                  type: integer
+              required:
+                - title
+                - content
+                - userId
+      responses:
+        '200':
+          description: Post created
+    get:
+      summary: Get all posts
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example: []
+  /posts/{id}:
+    get:
+      summary: Get a post by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example: {}
+    put:
+      summary: Update a post by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Post data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+                userId:
+                  type: integer
+              required:
+                - title
+                - content
+                - userId
+      responses:
+        '200':
+          description: Post updated
+    delete:
+      summary: Delete a post by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Post deleted
+security:
+  - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
